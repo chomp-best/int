@@ -1,0 +1,10 @@
+{
+  "name": "eliseo-studio-intelligence",
+  "version": "1.0.0",
+  "description": "Infraestructura de IA para Eliseo Studio",
+  "main": "index.html",
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {}
+}

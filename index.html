@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliseo Studio - Prueba Pulse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInRight { from { transform: translateX(60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInBottom { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes statusPulse { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+        .animate-fade { animation: fadeIn 1.2s ease-out forwards; }
+        .animate-left { animation: slideInLeft 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; opacity: 0; }
+        .animate-right { animation: slideInRight 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; opacity: 0; }
+        .animate-bottom { animation: slideInBottom 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; opacity: 0; }
+        .status-dot { width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block; animation: statusPulse 2s infinite; }
+        .glass-nav { backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0, 0, 0, 0.7); }
+        .pulse-island { background: #0A0A0A; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); transition: transform 0.3s ease; }
+        .pulse-island:hover { transform: scale(1.05); }
+        .eliseo-card { background: #0A0A0A; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 40px; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .eliseo-card:hover { border-color: rgba(255, 255, 255, 0.15); transform: translateY(-4px); }
+        input, textarea { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; color: #ffffff; }
+        input:focus, textarea:focus { border-color: rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.03); outline: none; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .hidden-view { display: none; }
+        .badge-text { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; font-weight: 600; }
+        .tracking-negative { letter-spacing: -0.05em; }
+    </style>
+</head>
+<body class="bg-black">
+
+    <nav class="fixed top-0 w-full z-50 glass-nav px-8 py-6 flex justify-between items-center">
+        <div class="flex items-center gap-4 cursor-pointer overflow-hidden">
+            <div class="w-10 h-10 bg-white flex items-center justify-center rounded-xl shadow-lg"><span class="text-black font-bold text-xl pt-1">e.</span></div>
+            <div class="flex flex-col animate-fade"><span class="tracking-negative font-bold text-xl leading-none">Eliseo Studio</span><span class="text-[9px] tracking-[0.5em] uppercase opacity-40 mt-1 italic">Intelligence Division</span></div>
+        </div>
+        <div class="hidden md:flex items-center gap-10 badge-text">
+            <a href="/" class="opacity-40 hover:opacity-100 transition-all">Inicio</a>
+            <a href="/center.html" class="opacity-40 hover:opacity-100 transition-all">Command Center</a>
+            <a href="https://wa.me/543795041420" target="_blank" class="px-5 py-2.5 bg-white text-black border border-white rounded-full hover:bg-transparent hover:text-white transition-all shadow-xl font-black">Contacto</a>
+        </div>
+    </nav>
+
+    <main class="pt-48 pb-32 px-6 md:px-20 max-w-7xl mx-auto" id="main-container">
+        
+        <section id="view-form" class="hidden-view">
+            <div class="text-center mb-20 flex flex-col items-center">
+                <div class="pulse-island rounded-full px-6 py-2 mb-10 flex items-center gap-4 animate-fade">
+                    <div class="relative flex items-center justify-center">
+                        <div class="w-2 h-2 bg-white rounded-full z-10"></div>
+                        <div class="w-2 h-2 bg-white rounded-full absolute animate-ping opacity-70"></div>
+                    </div>
+                    <span class="text-[10px] tracking-[0.5em] font-black uppercase text-white/90 select-none">Pulse All-in-One Engine</span>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-extrabold tracking-negative mb-8 leading-[0.9] animate-left">La Arquitectura <br /> del Mañana.</h1>
+                <p class="text-white/30 max-w-2xl mx-auto text-xl leading-relaxed font-light animate-right">Bienvenido al motor de diagnóstico de Eliseo Studio. Procesamiento Vercel Native para máxima seguridad.</p>
+                <div class="mt-12 inline-flex items-center gap-4 py-3 px-6 bg-white/[0.03] rounded-full border border-white/10 animate-fade">
+                    <div class="status-dot"></div>
+                    <p class="text-[11px] text-white/50 tracking-[0.1em] font-medium uppercase">Infraestructura Protegida</p>
+                </div>
+            </div>
+
+            <div class="eliseo-card p-8 md:p-16 relative overflow-hidden animate-bottom">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <form id="diagnosis-form" class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-8">
+                        <div class="space-y-2 group"><label class="badge-text opacity-30 ml-2">Identidad</label><input required id="input-name" placeholder="Nombre completo" class="w-full rounded-3xl py-5 px-6 text-lg"></div>
+                        <div class="space-y-2 group"><label class="badge-text opacity-30 ml-2">Conectividad</label><input required id="input-phone" type="tel" placeholder="Número de contacto" class="w-full rounded-3xl py-5 px-6 text-lg"></div>
+                        <div class="space-y-2 group"><label class="badge-text opacity-30 ml-2">Sector</label><input required id="input-industry" placeholder="Rubro o industria" class="w-full rounded-3xl py-5 px-6 text-lg"></div>
+                    </div>
+                    <div class="space-y-2 group flex flex-col"><label class="badge-text opacity-30 ml-2">Visión Operativa</label><textarea required id="input-details" placeholder="Detalle su naturaleza de negocio..." class="w-full h-full min-h-[220px] rounded-[32px] py-6 px-6 text-lg resize-none leading-relaxed"></textarea></div>
+                    <div class="md:col-span-2 pt-8 flex justify-center">
+                        <button type="submit" id="submit-btn" class="group relative px-20 py-6 bg-white text-black font-black tracking-widest text-xs rounded-2xl overflow-hidden hover:px-24 transition-all duration-700 active:scale-95 shadow-lg shadow-white/10">
+                            <span class="relative z-10 uppercase">Iniciar Diagnóstico</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="view-loading" class="hidden-view">
+            <div class="flex flex-col items-center justify-center py-40 text-center animate-fade">
+                <div class="relative mb-10">
+                    <i data-lucide="loader-2" class="w-16 h-16 animate-spin text-white/20"></i>
+                    <div class="absolute inset-0 w-16 h-16 border border-white/5 rounded-full animate-ping"></div>
+                </div>
+                <h3 class="text-[10px] tracking-[1.2em] text-white/40 uppercase font-medium animate-pulse">Procesando en Vercel Edge...</h3>
+            </div>
+        </section>
+
+        <section id="view-roadmap" class="hidden-view">
+            <div class="text-center mb-24 flex flex-col items-center">
+                <div class="pulse-island rounded-full px-6 py-2 mb-10 flex items-center gap-4">
+                    <div class="relative flex items-center justify-center">
+                        <div class="w-2 h-2 bg-white rounded-full z-10"></div>
+                        <div class="w-2 h-2 bg-white rounded-full absolute animate-ping opacity-70"></div>
+                    </div>
+                    <span class="text-[10px] tracking-[0.5em] font-black uppercase text-white/90">Protocolo Pulse</span>
+                </div>
+                <h2 id="roadmap-title" class="text-5xl md:text-7xl font-bold tracking-negative mb-6 text-white uppercase italic animate-left"></h2>
+                <div class="flex items-center justify-center gap-6 text-white/30 text-[11px] tracking-[0.3em] font-medium uppercase animate-fade" style="animation-delay: 400ms">
+                    <div class="flex items-center gap-2"><i data-lucide="clock" class="w-3 h-3"></i><span id="roadmap-time"></span></div>
+                    <span>/</span>
+                    <div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-3 h-3"></i><span>Status: Certificado</span></div>
+                </div>
+            </div>
+            <div id="roadmap-steps" class="space-y-8 max-w-4xl mx-auto"></div>
+            <div class="mt-32 max-w-3xl mx-auto p-12 md:p-20 bg-gradient-to-b from-[#0A0A0A] to-transparent rounded-[60px] border border-white/5 text-center relative overflow-hidden animate-bottom">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-white/20 to-transparent"></div>
+                <h4 class="text-3xl font-bold mb-6 tracking-tight">Diagnóstico Archivado Exitosamente.</h4>
+                <div class="flex flex-col items-center gap-8">
+                    <button onclick="downloadPDF()" class="group flex items-center gap-4 px-12 py-6 bg-white/5 border border-white/10 text-white font-bold tracking-[0.2em] text-[10px] rounded-2xl hover:bg-white hover:text-black transition-all duration-700 active:scale-95 uppercase shadow-xl">
+                        <i data-lucide="download" class="w-4 h-4"></i> Descargar Protocolo PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAXmYX6D9F8MTd-6TTc5AjOz7DhRy_cWH8",
+            authDomain: "eliseo-studio.firebaseapp.com",
+            projectId: "eliseo-studio",
+            storageBucket: "eliseo-studio.firebasestorage.app",
+            messagingSenderId: "44736873644",
+            appId: "1:44736873644:web:917beff23d8c61c3af8b09",
+            measurementId: "G-WY0B4DTVMZ"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = "eliseo-studio-v1";
+
+        let currentRoadmap = null;
+        let currentFormData = {};
+
+        const showView = (t) => {
+            const views = ['view-form', 'view-loading', 'view-roadmap'];
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if (el) el.classList.add('hidden-view');
+            });
+            const targetEl = document.getElementById(t);
+            if (targetEl) targetEl.classList.remove('hidden-view');
+            
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.onload = () => {
+            const savedData = localStorage.getItem('eliseo_pulse_vercel');
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                currentRoadmap = parsed.roadmap;
+                currentFormData = parsed.formData;
+                renderRoadmap(currentRoadmap);
+                showView('view-roadmap');
+            } else { 
+                showView('view-form'); 
+            }
+        };
+
+        document.getElementById('diagnosis-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            currentFormData = {
+                name: document.getElementById('input-name').value,
+                phone: document.getElementById('input-phone').value,
+                industry: document.getElementById('input-industry').value,
+                details: document.getElementById('input-details').value
+            };
+            showView('view-loading');
+            try {
+                // LLAMADA SIMPLIFICADA (Vercel Interna)
+                const response = await fetch("/api/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(currentFormData)
+                });
+                const aiRoadmap = await response.json();
+                currentRoadmap = aiRoadmap;
+
+                await signInAnonymously(auth);
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'leads'), {
+                    ...currentFormData, aiOutput: JSON.stringify(aiRoadmap), timestamp: serverTimestamp()
+                });
+
+                localStorage.setItem('eliseo_pulse_vercel', JSON.stringify({ formData: currentFormData, roadmap: aiRoadmap }));
+                renderRoadmap(aiRoadmap);
+                showView('view-roadmap');
+            } catch (err) {
+                console.error(err);
+                alert("Fallo en la conexión operativa.");
+                showView('view-form');
+            }
+        });
+
+        function renderRoadmap(r) {
+            const titleEl = document.getElementById('roadmap-title');
+            const timeEl = document.getElementById('roadmap-time');
+            const container = document.getElementById('roadmap-steps');
+            
+            if (titleEl) titleEl.textContent = r.title;
+            if (timeEl) timeEl.textContent = `Carga: ${r.totalTime} Días`;
+            if (container) {
+                container.innerHTML = '';
+                r.steps.forEach((s, idx) => {
+                    const card = document.createElement('div');
+                    card.className = `eliseo-card overflow-hidden cursor-pointer ${idx % 2 === 0 ? 'animate-left' : 'animate-right'}`;
+                    card.style.animationDelay = `${(idx * 200) + 500}ms`;
+                    card.innerHTML = `
+                        <div class="p-10 md:p-14 flex justify-between items-center">
+                            <div class="flex items-center gap-8">
+                                <span class="text-5xl font-black opacity-5">${idx + 1}</span>
+                                <h3 class="text-2xl md:text-3xl font-bold tracking-tight text-white/90 italic uppercase">${s.title}</h3>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/5 text-white/30"><i data-lucide="${s.icon || 'zap'}"></i></div>
+                        </div>`;
+                    container.appendChild(card);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        window.downloadPDF = function() {
+            const { jsPDF } = window.jspdf;
+            const docPdf = new jsPDF();
+            docPdf.text("ELISEO STUDIO - PULSE", 20, 30);
+            docPdf.save(`Protocolo_${currentFormData.name}.pdf`);
+        };
+    </script>
+</body>
+</html>

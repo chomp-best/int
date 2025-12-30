@@ -4,8 +4,9 @@
   "description": "Infraestructura de IA para Eliseo Studio",
   "main": "index.html",
   "engines": {
-    "node": "24.x"
+    "node": "20.x"
   },
   "dependencies": {}
 
 }
+
